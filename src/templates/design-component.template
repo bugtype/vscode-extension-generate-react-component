@@ -1,0 +1,11 @@
+import React, { ButtonHTMLAttributes } from "react";
+
+interface ComponentNameProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    //
+}
+
+export const ComponentName = (props: ComponentNameProps) => {
+    const { children } = props;
+ 
+    return <button {...props}>{children}</button>;
+};
