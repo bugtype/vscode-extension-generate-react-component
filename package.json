@@ -10,14 +10,24 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:generate-react-component.generate.react.component"
+		"onCommand:generate-react-component.generate.react.component",
+		"onCommand:generate-react-component.generate.react.component.design",
+		"onCommand:generate-react-component.generate.react.component.class"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "generate-react-component.generate.react.component",
-				"title": "Generate React component"
+				"title": "Generate React Component(default) - Functional"
+			},
+			{
+				"command": "generate-react-component.generate.react.component.design",
+				"title": "Generate Design React Component"
+			},
+			{
+				"command": "generate-react-component.generate.react.component.class",
+				"title": "Generate Class React component"
 			}
 		]
 	},
