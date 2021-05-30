@@ -6,23 +6,33 @@ export async function createReactComponentAction() {
     title: 'Please Input the component name',
     placeHolder: 'UserNameInput',
   });
-  vscode.window.showInformationMessage(input || '');
+
+  // if Not input
+  if (!input) {
+    return;
+  }
+
+  vscode.window.showInformationMessage(input);
 
   // create new file
-  const wsedit = new vscode.WorkspaceEdit();
-  const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath; // gets the path of the first workspace folder
-  const filePath = vscode.Uri.file(
+  const wsEdit = new vscode.WorkspaceEdit();
+  const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath;
+  // TODO: Add a method of modify the component path
+  const componentFilePath = vscode.Uri.file(
     wsPath + `/components/${input}/${input}.tsx`
   );
   const fileIndexPath = vscode.Uri.file(
-    wsPath + `/components/${input}/index.tsx`
+    wsPath + `/components/${input}/index.ts`
   );
 
-  vscode.window.showInformationMessage(filePath.toString());
+  wsEdit.createFile(componentFilePath, { ignoreIfExists: true });
+  wsEdit.createFile(fileIndexPath, { ignoreIfExists: true });
+  await vscode.workspace.applyEdit(wsEdit);
 
-  wsedit.createFile(filePath, { ignoreIfExists: true });
-  wsedit.createFile(fileIndexPath, { ignoreIfExists: true });
-  await vscode.workspace.applyEdit(wsedit);
+  if (fs.existsSync(fileIndexPath.fsPath)) {
+    vscode.window.showErrorMessage('The Component already exists.');
+    return;
+  }
 
   await fs.writeFile(
     fileIndexPath.fsPath,
@@ -30,12 +40,14 @@ export async function createReactComponentAction() {
     {
       encoding: 'utf8',
     },
-    (err) => {
-      if (err) {
-        vscode.window.showErrorMessage(err.message);
-      } else {
-        vscode.window.showInformationMessage('Generated React Component');
-      }
-    }
+    handleWriteFileError
   );
+}
+
+function handleWriteFileError(error: NodeJS.ErrnoException) {
+  if (error) {
+    vscode.window.showErrorMessage(error.message);
+  } else {
+    vscode.window.showInformationMessage('Generated React Component');
+  }
 }
