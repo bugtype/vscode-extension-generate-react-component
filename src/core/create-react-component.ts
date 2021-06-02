@@ -19,7 +19,7 @@ export async function createReactComponentAction() {
     return;
   }
 
-  // create new file
+  // Create new file
   const wsEdit = new vscode.WorkspaceEdit();
   const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath;
   // TODO: Add a method of modify the component path
