@@ -24,10 +24,10 @@ export async function createReactComponentAction() {
   const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath;
   // TODO: Add a method of modify the component path
   const componentFilePath = vscode.Uri.file(
-    wsPath + `/components/${input}/${input}.tsx`
+    `${wsPath}/components/${input}/${input}.tsx`
   );
   const fileIndexPath = vscode.Uri.file(
-    wsPath + `/components/${input}/index.ts`
+    `${wsPath}/components/${input}/index.ts`
   );
 
   wsEdit.createFile(componentFilePath, { ignoreIfExists: true });
