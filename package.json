@@ -16,8 +16,6 @@
 	],
 	"activationEvents": [
 		"onCommand:generate-react-component.generate.react.component",
-		"onCommand:generate-react-component.generate.react.component.design",
-		"onCommand:generate-react-component.generate.react.component.class"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
