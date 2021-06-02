@@ -2,13 +2,11 @@ import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 import * as _htmlTemplates from '../templates/html-elements';
 
-
 type UsedElement = keyof typeof _htmlTemplates;
 
 const htmlTemplates = _htmlTemplates;
 
 export async function createReactComponentAction() {
-  
   const { componentNameInput, htmlElementInput } = await getUserInputs();
 
   // if Not input
@@ -21,7 +19,6 @@ export async function createReactComponentAction() {
     return;
   }
 
-
   /**
    * Create new files
    */
@@ -31,14 +28,17 @@ export async function createReactComponentAction() {
 
   // TODO: Add a method of modify the component path
   const componentFilePath = vscode.Uri.file(
-    wsPath + `/components/${componentNameInput}/${componentNameInput}.tsx`
+    `${wsPath}/components/${componentNameInput}/${componentNameInput}.tsx`
   );
 
   const fileIndexPath = vscode.Uri.file(
-    wsPath + `/components/${componentNameInput}/index.ts`
+    `${wsPath}/components/${componentNameInput}/index.ts`
   );
 
-  if (fs.existsSync(componentFilePath.fsPath) || fs.existsSync(fileIndexPath.fsPath)) {
+  if (
+    fs.existsSync(componentFilePath.fsPath) ||
+    fs.existsSync(fileIndexPath.fsPath)
+  ) {
     vscode.window.showErrorMessage('The Component already exists.');
     return;
   }
@@ -46,7 +46,6 @@ export async function createReactComponentAction() {
   wsEdit.createFile(componentFilePath, { ignoreIfExists: true });
   wsEdit.createFile(fileIndexPath, { ignoreIfExists: true });
   await vscode.workspace.applyEdit(wsEdit);
-
 
   /**
    * file write
@@ -76,9 +75,7 @@ export async function createReactComponentAction() {
   );
 }
 
-
-async function getUserInputs(){
-
+async function getUserInputs() {
   const componentNameInput = await vscode.window.showInputBox({
     title: 'Please Input the component name',
     placeHolder: 'UserNameInput',
@@ -89,7 +86,10 @@ async function getUserInputs(){
     placeHolder: 'div, img',
   });
 
-  return { componentNameInput, htmlElementInput: (htmlElementInput as UsedElement | undefined) }
+  return {
+    componentNameInput,
+    htmlElementInput: htmlElementInput as UsedElement | undefined,
+  };
 }
 function handleWriteFile(error: NodeJS.ErrnoException) {
   if (error) {
