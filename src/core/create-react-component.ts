@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
+import * as htmlTemplates from '../templates/html-elements/div';
 
 export async function createReactComponentAction() {
   const input = await vscode.window.showInputBox({
@@ -7,12 +8,16 @@ export async function createReactComponentAction() {
     placeHolder: 'UserNameInput',
   });
 
+  const elInput = await vscode.window.showInputBox({
+    title: 'Please HTML Element name',
+    placeHolder: 'div, img',
+  });
+
   // if Not input
-  if (!input) {
+  if (!input || !elInput || !Object.keys(htmlTemplates).includes(elInput)) {
+    vscode.window.showErrorMessage('Please check the input');
     return;
   }
-
-  vscode.window.showInformationMessage(input);
 
   // create new file
   const wsEdit = new vscode.WorkspaceEdit();
@@ -29,14 +34,25 @@ export async function createReactComponentAction() {
   wsEdit.createFile(fileIndexPath, { ignoreIfExists: true });
   await vscode.workspace.applyEdit(wsEdit);
 
-  if (fs.existsSync(fileIndexPath.fsPath)) {
-    vscode.window.showErrorMessage('The Component already exists.');
-    return;
-  }
+  // if (fs.existsSync(fileIndexPath.fsPath)) {
+  //   vscode.window.showErrorMessage('The Component already exists.');
+  //   return;
+  // }
 
   await fs.writeFile(
     fileIndexPath.fsPath,
     `export * from './${input}'`,
+    {
+      encoding: 'utf8',
+    },
+    handleWriteFileError
+  );
+
+  const changedText = htmlTemplates.div.replaceAll(/ComponentName/gi, input);
+
+  await fs.writeFile(
+    componentFilePath.fsPath,
+    changedText,
     {
       encoding: 'utf8',
     },

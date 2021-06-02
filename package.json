@@ -19,15 +19,7 @@
 		"commands": [
 			{
 				"command": "generate-react-component.generate.react.component",
-				"title": "Generate React Component(default) - Functional"
-			},
-			{
-				"command": "generate-react-component.generate.react.component.design",
-				"title": "Generate Design React Component"
-			},
-			{
-				"command": "generate-react-component.generate.react.component.class",
-				"title": "Generate Class React component"
+				"title": "Generate React component (html element)"
 			}
 		]
 	},
@@ -47,6 +39,7 @@
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.4",
 		"@types/node": "^12.11.7",
+		"@types/react": "^17.0.8",
 		"@types/vscode": "^1.56.0",
 		"@typescript-eslint/eslint-plugin": "^4.14.1",
 		"@typescript-eslint/parser": "^4.14.1",
@@ -60,6 +53,7 @@
 		"webpack-cli": "^4.4.0"
 	},
 	"dependencies": {
-		"fs-extra": "^10.0.0"
+		"fs-extra": "^10.0.0",
+		"react": "^17.0.2"
 	}
 }
