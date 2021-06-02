@@ -15,7 +15,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:generate-react-component.generate.react.component",
+		"onCommand:generate-react-component.generate.react.component"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
