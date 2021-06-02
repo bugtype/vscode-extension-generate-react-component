@@ -24,5 +24,4 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
       - run: yarn install
       - run: yarn compile
-      - run: yarn test-compile
       - run: yarn test
