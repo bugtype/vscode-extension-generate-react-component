@@ -1,17 +1,18 @@
 import * as vscode from 'vscode';
-import { createReactComponentAction } from './core';
+import { createReactComponentAction, createHtmlComponentAction } from './core';
 
 export function activate(context: vscode.ExtensionContext) {
+  // html element
   const disposable = vscode.commands.registerCommand(
+    'generate-react-component.generate.html.component',
+    createHtmlComponentAction
+  );
+
+  // react component (List, CheckboxGroup .etc)
+  const disposable2 = vscode.commands.registerCommand(
     'generate-react-component.generate.react.component',
     createReactComponentAction
   );
-
-  // TODO: todo
-  // const disposable2 = vscode.commands.registerCommand(
-  //   'generate-react-component.generate.react.component.design',
-  //   createReactComponentAction
-  // );
 
   // const disposable3 = vscode.commands.registerCommand(
   //   'generate-react-component.generate.react.component.class',
@@ -19,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
   // );
 
   context.subscriptions.push(disposable);
-  // context.subscriptions.push(disposable2);
+  context.subscriptions.push(disposable2);
   // context.subscriptions.push(disposable3);
 }
 
