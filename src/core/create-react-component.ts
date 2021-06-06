@@ -6,9 +6,12 @@ type UsedElement = keyof typeof _htmlTemplates;
 
 const htmlTemplates = _htmlTemplates;
 
+const DEFAULT_COMPONENTS_FOLDER_PATH = 'src/components';
+let userComponentFolderPath: string | undefined;
+
 export async function createReactComponentAction() {
   const { componentNameInput, htmlElementInput } = await getUserInputs();
-
+  userComponentFolderPath = 'dd';
   // if Not input
   if (
     !componentNameInput ||
@@ -28,11 +31,11 @@ export async function createReactComponentAction() {
 
   // TODO: Add a method of modify the component path
   const componentFilePath = vscode.Uri.file(
-    `${wsPath}/components/${componentNameInput}/${componentNameInput}.tsx`
+    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/${componentNameInput}.tsx`
   );
 
   const fileIndexPath = vscode.Uri.file(
-    `${wsPath}/components/${componentNameInput}/index.ts`
+    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/index.ts`
   );
 
   if (
@@ -51,7 +54,7 @@ export async function createReactComponentAction() {
    * file write
    */
 
-  await fs.writeFile(
+  fs.writeFile(
     fileIndexPath.fsPath,
     `export * from './${componentNameInput}'`,
     {
@@ -65,7 +68,7 @@ export async function createReactComponentAction() {
     componentNameInput
   );
 
-  await fs.writeFile(
+  fs.writeFile(
     componentFilePath.fsPath,
     changedText,
     {
@@ -76,6 +79,17 @@ export async function createReactComponentAction() {
 }
 
 async function getUserInputs() {
+  if (!userComponentFolderPath) {
+    userComponentFolderPath = await vscode.window.showInputBox({
+      title: 'Please Input the component folder path',
+      placeHolder: DEFAULT_COMPONENTS_FOLDER_PATH,
+    });
+
+    if (!userComponentFolderPath) {
+      userComponentFolderPath = DEFAULT_COMPONENTS_FOLDER_PATH;
+    }
+  }
+
   const componentNameInput = await vscode.window.showInputBox({
     title: 'Please Input the component name',
     placeHolder: 'UserNameInput',
@@ -91,6 +105,7 @@ async function getUserInputs() {
     htmlElementInput: htmlElementInput as UsedElement | undefined,
   };
 }
+
 function handleWriteFile(error: NodeJS.ErrnoException) {
   if (error) {
     vscode.window.showErrorMessage(error.message);
