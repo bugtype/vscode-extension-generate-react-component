@@ -1,9 +1,5 @@
 # Change Log
 
-All notable changes to the "generate-react-component" extension will be documented in this file.
+- Adding to enter a component folder path
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
-
-- Initial release
