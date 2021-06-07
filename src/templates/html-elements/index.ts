@@ -1,2 +1,3 @@
-export * from './div';
-export * from './img';
+export * from "./DivComponent";
+export * from "./ImgComponent";
+export * from "./ButtonComponent";
