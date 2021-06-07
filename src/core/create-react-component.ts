@@ -2,60 +2,34 @@ import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 import path from 'path';
 import { AVAILABLE_REACT_ELEMENTS } from './const';
+import { InputValidationError, FileAlreadyExistsError } from './error';
 
 type AvailableElement = keyof typeof AVAILABLE_REACT_ELEMENTS;
 
 const htmlTemplates = AVAILABLE_REACT_ELEMENTS;
 const DEFAULT_COMPONENTS_FOLDER_PATH = 'src/components';
 
+const wsEdit = new vscode.WorkspaceEdit();
+const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath;
+
 // user component path
 let userComponentFolderPath: string | undefined;
 
-// TODO: adding error handling
 export async function createReactComponentAction() {
-  const { componentNameInput, htmlElementInput } = await getUserInputs();
+  try {
+    const { componentNameInput, htmlElementInput } = await getUserInputs();
+    const { componentFilePath, fileIndexPath } =
+      getComponentFileUri(componentNameInput);
 
-  // TODO: move to getUserInputs;
-  // if Not input
-  if (
-    !componentNameInput ||
-    !htmlElementInput ||
-    !htmlTemplates[htmlElementInput]
-  ) {
-    vscode.window.showErrorMessage('Please check the input');
-    return;
+    wsEdit.createFile(componentFilePath, { ignoreIfExists: true });
+    wsEdit.createFile(fileIndexPath, { ignoreIfExists: true });
+    await vscode.workspace.applyEdit(wsEdit);
+
+    createIndexFile(fileIndexPath, componentNameInput);
+    creatComponentFile(componentFilePath, componentNameInput, htmlElementInput);
+  } catch (error) {
+    vscode.window.showErrorMessage(error.message);
   }
-
-  /**
-   * Create new files
-   */
-
-  const wsEdit = new vscode.WorkspaceEdit();
-  const wsPath = vscode.workspace.workspaceFolders![0].uri.fsPath;
-
-  // TODO: Add a method of modify the component path
-  const componentFilePath = vscode.Uri.file(
-    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/${componentNameInput}.tsx`
-  );
-
-  const fileIndexPath = vscode.Uri.file(
-    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/index.ts`
-  );
-
-  if (
-    fs.existsSync(componentFilePath.fsPath) ||
-    fs.existsSync(fileIndexPath.fsPath)
-  ) {
-    vscode.window.showErrorMessage('The Component already exists.');
-    return;
-  }
-
-  wsEdit.createFile(componentFilePath, { ignoreIfExists: true });
-  wsEdit.createFile(fileIndexPath, { ignoreIfExists: true });
-  await vscode.workspace.applyEdit(wsEdit);
-
-  createIndexFile(fileIndexPath, componentNameInput);
-  creatComponentFile(componentFilePath, componentNameInput, htmlElementInput);
 }
 
 async function getUserInputs() {
@@ -76,13 +50,50 @@ async function getUserInputs() {
   });
 
   const htmlElementInput = await vscode.window.showInputBox({
-    title: 'Please HTML Element name',
+    title: 'Please Input HTML Element name',
     placeHolder: Object.keys(AVAILABLE_REACT_ELEMENTS).join(', '),
   });
 
+  if (
+    !componentNameInput ||
+    !htmlElementInput ||
+    !htmlTemplates[htmlElementInput]
+  ) {
+    throw new InputValidationError('Please check the input');
+  }
+
   return {
     componentNameInput,
-    htmlElementInput: htmlElementInput as AvailableElement | undefined,
+    htmlElementInput: htmlElementInput as AvailableElement,
+  };
+}
+
+function validateFiles(
+  componentFilePath: vscode.Uri,
+  fileIndexPath: vscode.Uri
+) {
+  if (
+    fs.existsSync(componentFilePath.fsPath) ||
+    fs.existsSync(fileIndexPath.fsPath)
+  ) {
+    throw new FileAlreadyExistsError('The Component already exists.');
+  }
+}
+
+function getComponentFileUri(componentNameInput: string) {
+  const componentFilePath = vscode.Uri.file(
+    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/${componentNameInput}.tsx`
+  );
+
+  const fileIndexPath = vscode.Uri.file(
+    `${wsPath}/${userComponentFolderPath}/${componentNameInput}/index.ts`
+  );
+
+  validateFiles(componentFilePath, fileIndexPath);
+
+  return {
+    componentFilePath,
+    fileIndexPath,
   };
 }
 
