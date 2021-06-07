@@ -22,7 +22,7 @@
 		"commands": [
 			{
 				"command": "generate-react-component.generate.react.component",
-				"title": "Generate React component (html element)"
+				"title": "Generate React component"
 			}
 		]
 	},
