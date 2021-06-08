@@ -31,6 +31,8 @@ module.exports = {
     'jsx-a11y/no-noninteractive-element-interactions': 0,
     'react/jsx-props-no-spreading': 0,
     indent: ['error', 2, { ImportDeclaration: 1 }],
+    // required at the storybook
+    ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
   },
   settings: {
     react: { version: 'detect' },

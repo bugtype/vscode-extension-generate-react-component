@@ -1,0 +1,18 @@
+import { ButtonComponent } from '../src/templates';
+
+<Meta
+  title="ButtonComponent"
+  component={ButtonComponent}
+  argTypes={{
+    title: {
+      control: { type: 'text', defaultValue: { summary: '' } },
+      defaultValue: 'HelloWorld',
+    },
+  }}
+/>
+
+# ButtonComponent
+
+export const Button01 = (args) => <ButtonComponent {...args} />;
+
+<Story name="standard">{Button01.bind({})}</Story>

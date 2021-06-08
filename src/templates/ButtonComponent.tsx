@@ -1,13 +1,16 @@
-import React, { HTMLAttributes, ImgHTMLAttributes } from 'react';
+import React, { HTMLAttributes } from 'react';
 
-// NOTE: loading property in ImgHTMLAttributes
 interface ButtonComponentProps extends HTMLAttributes<HTMLButtonElement> {
   //
-  alt: string; // a11y required
+  title: string;
 }
 
 export const ButtonComponent = (props: ButtonComponentProps) => {
-  const { ...other } = props;
+  const { title, ...others } = props;
 
-  return <button type="button" {...other} />;
+  return (
+    <button type="button" {...others}>
+      {props.title}
+    </button>
+  );
 };
