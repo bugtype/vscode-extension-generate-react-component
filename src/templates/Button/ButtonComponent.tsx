@@ -10,7 +10,7 @@ export const ButtonComponent = (props: ButtonComponentProps) => {
 
   return (
     <button type="button" {...others}>
-      {props.title}
+      {title}
     </button>
   );
 };
