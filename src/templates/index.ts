@@ -1,3 +1,3 @@
 export * from './DivComponent';
-export * from './ImgComponent';
-export * from './ButtonComponent';
+export * from './Image';
+export * from './Button';
