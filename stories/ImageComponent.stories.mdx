@@ -1,0 +1,25 @@
+import { ImgComponent } from '../src/templates/Image/ImgComponent';
+
+<Meta
+  title="Basic/Image"
+  component={ImgComponent}
+  argTypes={{
+    src: {
+      control: { type: 'text', defaultValue: { summary: '' } },
+      defaultValue:
+        'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
+    },
+    alt: {
+      control: { type: 'text', defaultValue: { summary: '' } },
+      defaultValue: 'google logo',
+    },
+  }}
+/>
+
+# ImgComponent
+
+Element: `img`
+
+export const Image01 = (args) => <ImgComponent {...args} />;
+
+<Story name="Image">{Image01.bind({})}</Story>
