@@ -6,7 +6,8 @@
 		"outDir": "out",
 		"lib": [
 			"es6",
-			"ESNext.String"
+			"ESNext.String",
+			"DOM"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
