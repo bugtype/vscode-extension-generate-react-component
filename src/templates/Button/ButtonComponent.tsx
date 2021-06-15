@@ -2,8 +2,8 @@ import React, { HTMLAttributes, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface ButtonComponentProps extends HTMLAttributes<HTMLButtonElement> {
-  //
-  title: string;
+  variant?: 'text' | 'outlined' | 'contained';
+  disabled?: boolean;
 }
 
 interface RippleProps {
@@ -12,9 +12,11 @@ interface RippleProps {
   y: number;
 }
 
-export const ButtonComponent = (props: ButtonComponentProps) => {
-  const { title, ...others } = props;
-
+export const ButtonComponent = ({
+  children,
+  onClick,
+  ...others
+}: ButtonComponentProps) => {
   const [ripples, setRipple] = useState<RippleProps[]>([]);
   const countRef = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -33,8 +35,10 @@ export const ButtonComponent = (props: ButtonComponentProps) => {
     setRipple((list) =>
       list.length > 5 ? [...list.slice(3), ripple] : [...list, ripple]
     );
-    props.onClick && props.onClick(e);
+    onClick && onClick(e);
   };
+
+  // Disabled
 
   return (
     <ButtonContainer
@@ -43,7 +47,7 @@ export const ButtonComponent = (props: ButtonComponentProps) => {
       onClick={handleOnClick}
       {...others}
     >
-      {title}
+      {children}
       <span>
         {ripples.map((r) => (
           <Ripple key={r.id} {...r} />
@@ -55,16 +59,16 @@ export const ButtonComponent = (props: ButtonComponentProps) => {
 
 const ButtonContainer = styled.button.attrs((props) => ({
   type: 'button',
-}))`
+}))<ButtonComponentProps>`
   outline: 0;
   overflow: hidden;
   display: inline-block;
   position: relative;
 
   padding: 16px;
-  background-color: white;
+  background-color: ${(props) => (props.disabled ? '#ececec' : 'white')};
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.23);
+  border: none;
 
   &:hover {
     background-color: #ececec;
@@ -73,6 +77,29 @@ const ButtonContainer = styled.button.attrs((props) => ({
   &:focus {
     border: 1px solid rgba(0, 0, 0, 0.7);
   }
+
+  /** variant */
+  ${({ variant }) =>
+    variant === 'contained' &&
+    `
+    color: white;
+    background: #5959f3;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+
+    &:hover {
+      background-color: #3a3afa;
+    }
+  `}
+
+  ${({ variant }) =>
+    variant === 'outlined' &&
+    `
+    color: #5959f3;
+    background: transport;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+  `}
 `;
 
 const Ripple = styled.span<RippleProps>`

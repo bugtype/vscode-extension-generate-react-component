@@ -25,6 +25,7 @@ module.exports = {
     'no-shadow': 0,
     'react/prop-types': 0,
     'no-unused-expressions': 0,
+    'react/require-default-props': 0,
     'react/jsx-filename-extension': [
       2,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },

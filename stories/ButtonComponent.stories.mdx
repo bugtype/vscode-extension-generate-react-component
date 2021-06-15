@@ -15,8 +15,13 @@ import { ButtonComponent } from '../src/templates/Button/ButtonComponent';
 
 export const Button01 = (args) => (
   <>
-    <ButtonComponent {...args} />
-    <ButtonComponent {...args} />
+    <ButtonComponent {...args}>{args.title}</ButtonComponent>
+    <ButtonComponent {...args} variant="contained">
+      {args.title}
+    </ButtonComponent>
+    <ButtonComponent {...args} variant="outlined">
+      {args.title}
+    </ButtonComponent>
   </>
 );
 
