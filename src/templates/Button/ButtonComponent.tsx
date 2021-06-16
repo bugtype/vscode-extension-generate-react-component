@@ -1,6 +1,18 @@
 import React, { HTMLAttributes, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+const colors = {
+  white: '#fff',
+  black: '#000',
+  disabled: '#ececec',
+  // etc
+};
+
+const shadowElevation = {
+  type1: '1px solid rgba(0, 0, 0, 0.23);',
+  type2: '1px solid rgba(0, 0, 0, 0.7);',
+};
+
 interface ButtonComponentProps extends HTMLAttributes<HTMLButtonElement> {
   variant?: 'text' | 'outlined' | 'contained';
   disabled?: boolean;
@@ -14,6 +26,8 @@ interface RippleProps {
 
 export const ButtonComponent = ({
   children,
+  variant = 'text',
+  disabled = false,
   onClick,
   ...others
 }: ButtonComponentProps) => {
@@ -45,6 +59,8 @@ export const ButtonComponent = ({
       ref={buttonRef}
       type="button"
       onClick={handleOnClick}
+      variant={variant}
+      disabled={disabled}
       {...others}
     >
       {children}
@@ -66,29 +82,28 @@ const ButtonContainer = styled.button.attrs((props) => ({
   position: relative;
 
   padding: 16px;
-  background-color: ${(props) => (props.disabled ? '#ececec' : 'white')};
+  background: ${colors.white};
   border-radius: 4px;
   border: none;
 
   &:hover {
-    background-color: #ececec;
+    background: #ececec;
   }
 
   &:focus {
-    border: 1px solid rgba(0, 0, 0, 0.7);
+    border: ${shadowElevation.type1};
   }
 
   /** variant */
   ${({ variant }) =>
     variant === 'contained' &&
     `
-    color: white;
+    color: ${colors.white};
     background: #5959f3;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.23);
 
     &:hover {
-      background-color: #3a3afa;
+      background: #3a3afa;
     }
   `}
 
@@ -98,14 +113,31 @@ const ButtonContainer = styled.button.attrs((props) => ({
     color: #5959f3;
     background: transport;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.23);
+    border: ${shadowElevation.type2};
+    
+  `}
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+    color: #8d8d8d;
+    background: ${colors.disabled};
+    border: 0px;
+
+    &:hover {
+      background: ${colors.disabled};
+    }
+
+    &:focus {
+      background: ${colors.disabled};
+    }
   `}
 `;
 
 const Ripple = styled.span<RippleProps>`
   left: ${(props) => props.x}px;
   top: ${(props) => props.y}px;
-  background-color: #5959f3;
+  background: #5959f3;
   width: 1rem;
   height: 1rem;
   position: absolute;
