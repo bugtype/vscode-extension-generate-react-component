@@ -24,13 +24,15 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 0,
     'no-shadow': 0,
     'react/prop-types': 0,
+    'no-unused-expressions': 0,
+    'react/require-default-props': 0,
     'react/jsx-filename-extension': [
       2,
       { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
     'jsx-a11y/no-noninteractive-element-interactions': 0,
     'react/jsx-props-no-spreading': 0,
-    indent: ['error', 2, { ImportDeclaration: 1 }],
+    // indent: ['error', 2, { ImportDeclaration: 1 }],
   },
   settings: {
     react: { version: 'detect' },
